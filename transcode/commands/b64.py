@@ -24,7 +24,7 @@ def decode(ctx):
 def encode(ctx):
 	first = True
 	for subject in ctx.subjects:
-		b64 = codecs.encode(bytes(subject, 'utf-8'), 'base64').decode('utf-8')
+		b64 = codecs.encode(bytes(subject, 'utf-8'), 'base64').decode('utf-8')[:-1]
 
 		if not first:
 			print()
