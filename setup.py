@@ -11,5 +11,6 @@ setup(
     entry_points='''
         [console_scripts]
         transcode=transcode.cli:cli
+        t=transcode.cli:cli
     ''',
 )
