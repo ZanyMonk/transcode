@@ -2,31 +2,18 @@ import os
 import sys
 import click
 
+from transcode.environment import Environment
+from transcode.common import add_common_options
+
 CONTEXT_SETTINGS = dict(
     auto_envvar_prefix='TRANSCODE',
     help_option_names=['-h', '--help']
 )
 
-class Environment(object):
-    def __init__(self):
-        self.verbose = False
-        self.subjects = []
-
-    def log(self, msg, *args):
-        """Logs a message to stderr."""
-        if args:
-            msg %= args
-        click.echo(msg, file=sys.stderr)
-
-    def vlog(self, msg, *args):
-        """Logs a message to stderr only if verbose is enabled."""
-        if self.verbose:
-            self.log(msg, *args)
-
-
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
-cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                          'commands'))
+cmd_folder = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), 'commands')
+)
 
 class TranscodeCLI(click.MultiCommand):
     def list_commands(self, ctx):
@@ -49,12 +36,10 @@ class TranscodeCLI(click.MultiCommand):
 
 
 @click.command(cls=TranscodeCLI, context_settings=CONTEXT_SETTINGS)
-@click.option('-v', '--verbose', is_flag=True,
-              help='Enables verbose mode.')
+@add_common_options
 @pass_environment
-def cli(ctx, verbose):
+def cli(ctx):
     stdin = click.get_text_stream('stdin')
 
     if not stdin.isatty():
         ctx.subjects.append(''.join(stdin.readlines()))
-    ctx.verbose = verbose
