@@ -31,7 +31,7 @@ def encode(ctx):
 		else:
 			first = False
 
-		print('{}{}{}'.format(ctx.get_prefix(), b64, ctx.get_suffix()), end='')
+		print('{}{}{}'.format(ctx.prefix, b64, ctx.suffix), end='')
 
 if __name__ == '__main__':
 	convert()

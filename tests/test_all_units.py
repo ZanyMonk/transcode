@@ -6,4 +6,4 @@ from test_bin import TestTranscodeBin
 from test_b64 import TestTranscodeB64
 
 if __name__ == '__main__':
-	unittest.main()
+    unittest.main()
