@@ -1,6 +1,5 @@
 import re
 import click
-import codecs
 from sys import exit
 from transcode.cli import pass_environment
 from transcode.common import add_common_options
@@ -42,12 +41,14 @@ def decode(ctx):
         string = subject.decode('utf-8', ctx.decode_mode)
         pattern = re.compile(r'(%[a-f0-9]{2})', re.IGNORECASE)
         table = ctx.gen_trans_table(string, pattern, lambda m: chr(int(m[1:], 16)))
-        print(ctx.translate(string, table))
+
+        print(ctx.translate(string, table), end='')
 
 
 def encode(ctx, process_all):
     for subject in ctx.subjects:
-        string = subject.decode('utf-8', ctx.decode_mode)
+        if isinstance(subject, bytes):
+            subject = subject.decode('utf-8', 'replace')
 
         if process_all:
             pattern = re.compile(r'(.)', re.IGNORECASE | re.DOTALL)
@@ -60,10 +61,10 @@ def encode(ctx, process_all):
             h = h.zfill(l + l%2)
             return ''.join(['%{}'.format(h[i:i+2]) for i in range(0, l, 2)])
 
-        table = ctx.gen_trans_table(string, pattern, transform)
+        table = ctx.gen_trans_table(subject, pattern, transform)
 
         if process_all:
-            for c in string:
+            for c in subject:
                 print(table[c], end='')
         else:
-            ctx.translate(string, table)
+            print(ctx.translate(subject, table), end='')

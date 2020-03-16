@@ -1,4 +1,3 @@
-import re
 import click
 from sys import exit
 from transcode.cli import pass_environment
