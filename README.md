@@ -34,3 +34,18 @@ Commands:
     -l, --level <int>  Compression level. 0: no compression, 1: best speed, 9:
                        best compression  [default: 6]
 ```
+
+## Examples
+### Shortcut
+```
+$ transcode hex abcd
+0x61626364
+$ t hex abcd
+0x61626364
+```
+
+### Piping
+```
+$ cat data.bin | t dec -js
+abcd
+```

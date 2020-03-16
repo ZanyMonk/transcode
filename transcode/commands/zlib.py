@@ -39,10 +39,15 @@ def decode(ctx):
             subject = bytes(subject, 'utf-8', 'replace')
 
         try:
-            stdout.write(zlib.decompress(subject))
+            decompressed = zlib.decompress(subject)
         except zlib.error as err:
             ctx.elog(err)
             exit(1)
+
+        if ctx.unsafe:
+            stdout.write(decompressed)
+        else:
+            print(decompressed.decode('utf-8', ctx.decode_mode))
 
 
 def encode(ctx, level):
@@ -52,13 +57,20 @@ def encode(ctx, level):
         if isinstance(subject, str):
             subject = bytes(subject, 'utf-8')
 
-        encoded = zlib.compress(subject, level)
+        compressed = zlib.compress(subject, level)
 
         if not first:
             stdout.write('\n')
         else:
             first = False
 
-        if ctx.has_prefix: stdout.write(bytes(ctx.prefix, 'utf-8', 'replace'))
-        stdout.write(encoded)
-        if ctx.has_prefix: stdout.write(bytes(ctx.suffix, 'utf-8', 'replace'))
+        if ctx.has_prefix:
+            stdout.write(bytes(ctx.prefix, 'utf-8', 'replace'))
+
+        if ctx.unsafe:
+            stdout.write(compressed)
+        else:
+            print(compressed.decode('utf-8', ctx.decode_mode))
+
+        if ctx.has_prefix:
+            stdout.write(bytes(ctx.suffix, 'utf-8', 'replace'))

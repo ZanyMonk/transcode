@@ -34,6 +34,9 @@ def cli(ctx, subjects, js):
 
 def decode(ctx):
     for subject in ctx.subjects:
+        if isinstance(subject, bytes):
+            subject = subject.decode('utf-8', 'replace')
+
         subject = ctx.strip_fixes(subject)
         numbers = ctx.split(subject)
 
@@ -44,7 +47,10 @@ def decode(ctx):
 def encode(ctx):
     first = True
     for subject in ctx.subjects:
-        dec = ctx.separator.join([str(ord(c)) for c in subject])
+        if isinstance(subject, str):
+            subject = bytes(subject, 'utf-8', 'replace')
+
+        dec = ctx.separator.join([str(c) for c in subject])
 
         if not first:
             print()

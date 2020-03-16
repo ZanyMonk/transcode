@@ -7,7 +7,7 @@ from abstract_test import AbstractTestTranscodeCommand
 class TestTranscodeBin(unittest.TestCase, AbstractTestTranscodeCommand):
     cli = bin.cli
     giberish = 'not_binary'
-    result = '1100001 1100010 1100011'
+    result = '01100001 01100010 01100011'
 
 
 if __name__ == '__main__':
