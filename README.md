@@ -47,5 +47,22 @@ $ t hex abcd
 ### Piping
 ```
 $ cat data.bin | t dec -js
-abcd
+String.fromCharCode(137,80,78,71,...)
 ```
+
+## TODO
+- `c2b` command, converts lower/upper case to bits, outputs binary
+- mono/bi-grams frequency table
+- Index of Coincidence
+- `--wrap <int>` to wrap safe output to defined col width
+### `c2b`
+> Converts lower/uppercase to bits
+- `--byte-length` to set output byte length
+- `--one <pattern>` to set the regex used to find 1s
+- `--zero <pattern>` to set the regex used to find 0s
+- `--case` Aa > 10 (make default)
+### `url`
+- `--depth` to encode/decode multiple times (double encoding)
+### `b64`
+- `--ignore-garbage` to strip non-compliant characters (make default)
+- `--charset` to set custom encoding charset

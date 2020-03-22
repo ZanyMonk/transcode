@@ -2,16 +2,17 @@ import re
 import click
 from sys import exit
 from transcode.cli import pass_environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('url', help='Converts to/from URL encoding (ie. %5C).')
 @click.argument('subjects', nargs=-1)
-@click.option('-a', '--all', 'process_all', flag_value=True,
+@click.option('-a', '--all', 'process_all', flag_value=True, default=True,
               help='Process every character')
 @click.option('-A', '--non-ascii', 'process_all', flag_value=False,
               help='Process only non-ASCII characters. Not available in reverse mode. (default)')
 @add_common_options
+@add_reverse_option
 @pass_environment
 def cli(ctx, subjects, process_all):
     ctx.subjects = ctx.subjects + list(subjects)
@@ -20,7 +21,7 @@ def cli(ctx, subjects, process_all):
         click.echo(click.get_current_context().get_help())
         exit(0)
 
-    if ctx.has_prefix:
+    if not ctx.has_prefix:
         ctx.prefix = '%'
 
     if ctx.reverse:

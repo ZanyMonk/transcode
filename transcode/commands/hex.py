@@ -2,7 +2,7 @@ import click
 import codecs
 from sys import exit
 from transcode.cli import pass_environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('hex', short_help='Converts to/from hexadecimal.')
@@ -12,6 +12,7 @@ from transcode.common import add_common_options
 @click.option('-c', '--lower', 'upper', flag_value=False,
               help='Outputs lowercase hexadecimal (default)')
 @add_common_options
+@add_reverse_option
 @pass_environment
 def cli(ctx, subjects, upper):
     ctx.subjects = ctx.subjects + list(subjects)

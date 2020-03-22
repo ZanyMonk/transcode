@@ -59,10 +59,7 @@ class Environment(object):
         return{m: transform(m) for m in set(re.findall(pattern, subject))}
 
     def translate(self, subject: str, table: dict):
-        for encoded, decoded in table.items():
-            subject = subject.replace(encoded, decoded)
-
-        return subject
+        return ''.join([table[c] if c in table else c for c in subject])
 
     def split(self, subject):
         return re.split(self._separator, subject)

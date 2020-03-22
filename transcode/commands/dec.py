@@ -16,7 +16,7 @@ def cli(ctx, subjects, js):
         click.echo(click.get_current_context().get_help())
         exit(0)
 
-    if ctx.separator == '':
+    if not ctx.has_separator:
         ctx.separator = ','
 
     if js:

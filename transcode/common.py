@@ -2,6 +2,23 @@ import click
 from transcode.environment import Environment
 
 
+class RangeParamType(click.ParamType):
+    name = 'range'
+
+    def convert(self, value, param, ctx):
+        try:
+            int(value)
+            return [int(value)]
+        except ValueError:
+            if '-' in value:
+                values = value.split('-')
+                return list(range(int(values[0]), int(values[1]) + 1))
+            elif ',' in value:
+                return value.split(',')
+            else:
+                self.fail('{}.\nPlease, use offset (3), range (3-13) or list format (3,4,5)'.format(value))
+
+
 def add_verbosity_option(f):
     def callback(ctx, param, value):
         state = ctx.ensure_object(Environment)
@@ -100,7 +117,6 @@ def add_separator_option(f):
 
 def add_common_options(f):
     f = add_verbosity_option(f)
-    f = add_reverse_option(f)
     f = add_unsafe_option(f)
     f = add_prefix_option(f)
     f = add_suffix_option(f)

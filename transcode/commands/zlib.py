@@ -2,7 +2,7 @@ import zlib
 import click
 from sys import exit
 from transcode.cli import pass_environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('zlib', help='Compress/decompress zlib encoded data.')
@@ -10,6 +10,7 @@ from transcode.common import add_common_options
 @click.option('-l', '--level', type=int, default=6, metavar='<int>', show_default=True,
               help='Compression level. 0: no compression, 1: best speed, 9: best compression')
 @add_common_options
+@add_reverse_option
 @pass_environment
 def cli(ctx, subjects, level):
     if level < 0 or level > 9:

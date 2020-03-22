@@ -1,12 +1,13 @@
 import click
 import codecs
 from transcode.cli import pass_environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('b64', help='Converts to/from base64.')
 @click.argument('subjects', nargs=-1)
 @add_common_options
+@add_reverse_option
 @pass_environment
 def cli(ctx, subjects):
     ctx.subjects = ctx.subjects + list(subjects)
@@ -24,7 +25,7 @@ def decode(ctx):
 
         subject = ctx.strip_fixes(subject)
 
-        print(codecs.decode(bytes(subject, 'utf-8'), 'base64').decode('utf-8'), end='')
+        print(codecs.decode(bytes(subject, 'utf-8'), 'base64').decode('utf-8', ctx.decode_mode), end='')
 
 
 def encode(ctx):

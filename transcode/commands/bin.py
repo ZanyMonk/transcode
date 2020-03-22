@@ -1,7 +1,7 @@
 import click
 from sys import exit
 from transcode.cli import pass_environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('bin', help='Converts to/from binary.')
@@ -9,6 +9,7 @@ from transcode.common import add_common_options
 @click.option('-b', '--byte-length', default=8, type=int, metavar='<int>', show_default=True,
               help='Byte length')
 @add_common_options
+@add_reverse_option
 @pass_environment
 def cli(ctx, subjects, byte_length):
     ctx.subjects = ctx.subjects + list(subjects)
@@ -17,7 +18,7 @@ def cli(ctx, subjects, byte_length):
         click.echo(click.get_current_context().get_help())
         exit(0)
 
-    if ctx.separator == '':
+    if not ctx.has_separator:
         ctx.separator = ' '
 
     if ctx.reverse:
@@ -46,7 +47,7 @@ def encode(ctx, byte_length):
         if isinstance(subject, str):
             subject = bytes(subject, 'utf-8', 'replace')
 
-        dec = ctx.separator.join([
+        encoded = ctx.separator.join([
             bin(c)[2:].rjust(byte_length, '0') for c in subject
         ])
 
@@ -55,5 +56,5 @@ def encode(ctx, byte_length):
         else:
             first = False
 
-        print('{}{}{}'.format(ctx.prefix, dec, ctx.suffix), end='')
+        print('{}{}{}'.format(ctx.prefix, encoded, ctx.suffix), end='')
 
