@@ -10,29 +10,43 @@ Options:
   -S, --suffix <str>     String added at the end of the output.
   -P, --prefix <str>     String added in front of the output.
   -u, --unsafe           Prints raw output, can damage TTY !
-  -r, --reverse          ie. transcode hex -r 0xDEADBEEF
   -v, --verbosity        Set verbosity level.
   -h, --help             Show this message and exit.
 
 Commands:
+  b64:
+    -r, --reverse  ie. transcode hex -r 0xDEADBEEF
+
   bin:
-    -b, --byte-length <int>  Byte length  [default: 7]
+    -b, --byte-length <int>  Byte length  [default: 8]
+    -r, --reverse            ie. transcode hex -r 0xDEADBEEF
 
   dec:
     -js, --fromCharCode  ie. String.fromCharCode(97,98,99) > abc
 
   hex:
-    -C, --upper  Outputs uppercase hexadecimal
-    -c, --lower  Outputs lowercase hexadecimal (default)
+    -C, --upper    Outputs uppercase hexadecimal
+    -c, --lower    Outputs lowercase hexadecimal (default)
+    -r, --reverse  ie. transcode hex -r 0xDEADBEEF
+
+  rot:
+    -n, --offset RANGE  Rotation offset.  [default: 13]
+    -a, --alpha         Use alphabet (default)
+    -A, --ascii         Use entire ASCII charset
+    -C, --charset TEXT  Use a custom charset. Overwrites -a and -A
 
   url:
     -a, --all        Process every character
     -A, --non-ascii  Process only non-ASCII characters. Not available in reverse
                      mode. (default)
 
+    -r, --reverse    ie. transcode hex -r 0xDEADBEEF
+
   zlib:
     -l, --level <int>  Compression level. 0: no compression, 1: best speed, 9:
                        best compression  [default: 6]
+
+    -r, --reverse      ie. transcode hex -r 0xDEADBEEF
 ```
 
 ## Examples
@@ -51,6 +65,8 @@ String.fromCharCode(137,80,78,71,...)
 ```
 
 ## TODO
+- add missing tests
+- `--file` to set a file to read input from
 - `c2b` command, converts lower/upper case to bits, outputs binary
 - mono/bi-grams frequency table
 - Index of Coincidence

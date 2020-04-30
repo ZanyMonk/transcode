@@ -7,8 +7,10 @@ from transcode.common import add_common_options, add_reverse_option
 
 @click.command('zlib', help='Compress/decompress zlib encoded data.')
 @click.argument('subjects', nargs=-1)
-@click.option('-l', '--level', type=int, default=6, metavar='<int>', show_default=True,
-              help='Compression level. 0: no compression, 1: best speed, 9: best compression')
+@click.option('-l', '--level', type=int, default=6, metavar='<int>',
+              help="""\b
+              Compression level. [default: 6]
+              0: no compression, 1: best speed, 9: best compression""")
 @add_common_options
 @add_reverse_option
 @pass_environment

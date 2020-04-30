@@ -10,12 +10,14 @@ RANGE = RangeParamType()
 
 @click.command('rot', help='Rotates characters.')
 @click.argument('subjects', nargs=-1)
-@click.option('-n', '--offset', type=RANGE, default=13, show_default=True, help='Rotation offset.')
+@click.option('-n', '--offset', type=RANGE, default=13, show_default=True, metavar='<int>',
+              help='Rotation offset.')
 @click.option('-a', '--alpha', 'charset', flag_value='alpha', default=True,
               help='Use alphabet (default)')
 @click.option('-A', '--ascii', 'charset', flag_value='ascii',
               help='Use entire ASCII charset')
-@click.option('-C', '--charset', 'custom_charset', default=None, help='Use a custom charset. Overwrites -a and -A')
+@click.option('-C', '--charset', 'custom_charset', default=None, metavar='<str>',
+              help='Use a custom charset. Overwrites -a and -A')
 @add_common_options
 @pass_environment
 def cli(ctx, subjects, offset, charset, custom_charset):

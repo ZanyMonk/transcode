@@ -46,7 +46,7 @@ def add_reverse_option(f):
         '-r', '--reverse', is_flag=True,
         expose_value=False,
         default=None,   # Disable click default mechanism
-        help='ie. transcode hex -r 0xDEADBEEF',
+        help='Reverse process (decode)',
         callback=callback
     )(f)
 

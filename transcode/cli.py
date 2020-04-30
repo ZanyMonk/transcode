@@ -37,7 +37,7 @@ class TranscodeCLI(click.MultiCommand):
                     if rv is not None:
                         opts.append(rv)
 
-                with fmt.section('{}Options{}'.format(Style.BRIGHT, Style.RESET_ALL)):
+                with fmt.section('{}Common options{}'.format(Style.BRIGHT, Style.RESET_ALL)):
                     fmt.write_dl(opts)
 
                 shown = set([''.join(p.opts) for p in self.get_params(ctx)])
@@ -54,9 +54,11 @@ class TranscodeCLI(click.MultiCommand):
                         if ''.join(p.opts) not in shown and rv is not None:
                             opts.append(rv)
 
+                    fmt.write_paragraph()
+                    fmt.write_text('{}{}{}\t{}'.format(Style.BRIGHT, name, Style.RESET_ALL, cmd.help))
+
                     if opts:
-                        with fmt.section('{}{}{}'.format(Style.BRIGHT, name, Style.RESET_ALL)):
-                            fmt.write_dl(opts)
+                        fmt.write_dl(opts)
                 click.echo(fmt.getvalue())
                 exit(0)
 
@@ -84,9 +86,6 @@ class TranscodeCLI(click.MultiCommand):
         return mod.cli
 
 
-def lol():
-    print('ok')
-
 @click.command(cls=TranscodeCLI, context_settings=CONTEXT_SETTINGS, options_metavar='',
                subcommand_metavar='COMMAND [command options] <subject>',
                add_help_option=False)
@@ -102,9 +101,3 @@ def cli(ctx):
                 ctx.subjects.append(next(bytechunks))
             except StopIteration:
                 break
-        # t = stdin.read()
-        # print(len(t))
-        # print(t)
-        # ctx.subjects.append(t)
-
-# 7801010d00efbfbdefbfbd3543444541444245454632430a16efbfbd0318
