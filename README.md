@@ -5,7 +5,7 @@ Simple CLI utility that converts data into various encodings.
 ```
 Usage: transcode COMMAND [command options] <subject>
 
-Options:
+Common options:
   -s, --separator <str>  String added in between each char.
   -S, --suffix <str>     String added at the end of the output.
   -P, --prefix <str>     String added in front of the output.
@@ -14,39 +14,46 @@ Options:
   -h, --help             Show this message and exit.
 
 Commands:
-  b64:
-    -r, --reverse  ie. transcode hex -r 0xDEADBEEF
+  b64     Converts to/from base64.
+  -r, --reverse  Reverse process (decode)
 
-  bin:
-    -b, --byte-length <int>  Byte length  [default: 8]
-    -r, --reverse            ie. transcode hex -r 0xDEADBEEF
+  bin     Converts to/from binary.
+  -b, --byte-length <int>  Byte length  [default: 8]
+  -r, --reverse            Reverse process (decode)
 
-  dec:
-    -js, --fromCharCode  ie. String.fromCharCode(97,98,99) > abc
+  dec     Converts to/from decimal.
+  -js, --fromCharCode  ie. String.fromCharCode(97,98,99) > abc
+  -r, --reverse        Reverse process (decode)
 
-  hex:
-    -C, --upper    Outputs uppercase hexadecimal
-    -c, --lower    Outputs lowercase hexadecimal (default)
-    -r, --reverse  ie. transcode hex -r 0xDEADBEEF
+  hex     None
+  -C, --upper    Outputs uppercase hexadecimal
+  -c, --lower    Outputs lowercase hexadecimal (default)
+  -r, --reverse  Reverse process (decode)
 
-  rot:
-    -n, --offset RANGE  Rotation offset.  [default: 13]
-    -a, --alpha         Use alphabet (default)
-    -A, --ascii         Use entire ASCII charset
-    -C, --charset TEXT  Use a custom charset. Overwrites -a and -A
+  not     Inverse every bit.
 
-  url:
-    -a, --all        Process every character
-    -A, --non-ascii  Process only non-ASCII characters. Not available in reverse
-                     mode. (default)
+  rot     Rotates characters.
+  -n, --offset <int>   Rotation offset.  [default: 13]
+  -a, --alpha          Use alphabet (default)
+  -A, --ascii          Use entire ASCII charset
+  -C, --charset <str>  Use a custom charset. Overwrites -a and -A
 
-    -r, --reverse    ie. transcode hex -r 0xDEADBEEF
+  url     Converts to/from URL encoding (ie. %5C).
+  -a, --all        Process every character
+  -A, --non-ascii  Process only non-ASCII characters. Not available in reverse
+                   mode. (default)
 
-  zlib:
-    -l, --level <int>  Compression level. 0: no compression, 1: best speed, 9:
-                       best compression  [default: 6]
+  -r, --reverse    Reverse process (decode)
 
-    -r, --reverse      ie. transcode hex -r 0xDEADBEEF
+  xor     (un)XOR bytes.
+  -x, --hexa  Get key as hexadecimal
+
+  zlib    Compress/decompress zlib encoded data.
+  -l, --level <int>  Compression level. [default: 6]
+                     0: no compression, 1: best speed, 9: best compression
+
+  -r, --reverse      Reverse process (decode)
+
 ```
 
 ## Examples
