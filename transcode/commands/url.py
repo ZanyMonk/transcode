@@ -1,6 +1,5 @@
 import re
 import click
-from sys import exit
 from transcode.cli import pass_environment
 from transcode.common import add_common_options, add_reverse_option
 
@@ -18,8 +17,7 @@ def cli(ctx, subjects, process_all):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if not ctx.has_prefix:
         ctx.prefix = '%'
@@ -43,7 +41,7 @@ def decode(ctx):
         pattern = re.compile(r'(%[a-f0-9]{2})', re.IGNORECASE)
         table = ctx.gen_trans_table(string, pattern, lambda m: chr(int(m[1:], 16)))
 
-        print(ctx.translate(string, table), end='')
+        ctx.output(ctx.translate(string, table))
 
 
 def encode(ctx, process_all):

@@ -12,8 +12,7 @@ def cli(ctx, subjects):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if ctx.separator == '':
         ctx.separator = ' '
@@ -26,5 +25,5 @@ def encode(ctx):
         if isinstance(subject, str):
             subject = bytes(subject, 'utf-8', 'replace')
 
-        print(''.join([chr(b ^ 0xFF) for b in subject]))
+        ctx.output(bytes([b ^ 0xFF for b in subject]))
 

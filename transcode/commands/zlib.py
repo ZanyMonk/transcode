@@ -16,27 +16,28 @@ from transcode.common import add_common_options, add_reverse_option
 @pass_environment
 def cli(ctx, subjects, level):
     if level < 0 or level > 9:
-        ctx.elog("""Invalid compression level "{}". Use one of these values or a value in between:
-        0: no compression
-        1: best speed
-        .
-        6: best speed/compression compromise (default)
-        .
-        9: best compression""".format(level))
-        exit(1)
+        click.get_current_context().fail(
+            f'Invalid compression level "{level}".' +
+            """\nUse one of these values or a value in between:
+    0: no compression
+    1: best speed
+    .
+    6: best speed/compression compromise (default)
+    .
+    9: best compression
+            """
+        )
 
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
         ctx.elog('No input given.')
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     decode(ctx) if ctx.reverse else encode(ctx, level)
 
 
 def decode(ctx):
-    stdout = click.get_binary_stream('stdout')
     for subject in ctx.subjects:
         if isinstance(subject, str):
             subject = bytes(subject, 'utf-8', 'replace')
@@ -47,10 +48,7 @@ def decode(ctx):
             ctx.elog(err)
             exit(1)
 
-        if ctx.unsafe:
-            stdout.write(decompressed)
-        else:
-            print(decompressed.decode('utf-8', ctx.decode_mode))
+        ctx.output(decompressed)
 
 
 def encode(ctx, level):

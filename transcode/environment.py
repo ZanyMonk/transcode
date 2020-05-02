@@ -77,6 +77,12 @@ class Environment(object):
 
         return subject
 
+    def output(self, data):
+        if self.unsafe:
+            click.get_binary_stream('stdout').write(data)
+        else:
+            print(data.decode('utf-8', self.decode_mode))
+
     def log(self, msg, output=sys.stdout, *args):
         """Logs a message to stderr."""
         click.echo(msg, file=output, *args)

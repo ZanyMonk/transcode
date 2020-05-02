@@ -24,8 +24,7 @@ def cli(ctx, subjects, offset, charset, custom_charset):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if custom_charset is not None:
         charset = custom_charset

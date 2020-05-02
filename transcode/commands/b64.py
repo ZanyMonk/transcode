@@ -24,8 +24,9 @@ def decode(ctx):
             subject = subject.decode('utf-8', 'replace')
 
         subject = ctx.strip_fixes(subject)
+        decoded = codecs.decode(bytes(subject, 'utf-8'), 'base64').decode('utf-8', ctx.decode_mode)
 
-        print(codecs.decode(bytes(subject, 'utf-8'), 'base64').decode('utf-8', ctx.decode_mode), end='')
+        ctx.output(decoded)
 
 
 def encode(ctx):

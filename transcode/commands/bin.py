@@ -15,8 +15,7 @@ def cli(ctx, subjects, byte_length):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if not ctx.has_separator:
         ctx.separator = ' '
@@ -26,11 +25,10 @@ def cli(ctx, subjects, byte_length):
         ctx.prefix = r'^[^\d]+'
         ctx.suffix = r'[^\d]+$'
 
-    decode(ctx, byte_length) if ctx.reverse else encode(ctx, byte_length)
+    decode(ctx) if ctx.reverse else encode(ctx, byte_length)
 
 
-def decode(ctx, byte_length):
-    stdout = click.get_binary_stream('stdout')
+def decode(ctx):
     for subject in ctx.subjects:
         if isinstance(subject, bytes):
             subject = subject.decode('utf-8', 'replace')
@@ -38,7 +36,7 @@ def decode(ctx, byte_length):
         subject = ctx.strip_fixes(subject)
         numbers = ctx.split(subject)
 
-        stdout.write(b''.join([int(n, 2).to_bytes(1, 'big') for n in numbers]))
+        ctx.output(bytes([int(n, 2) for n in numbers]))
 
 
 def encode(ctx, byte_length):

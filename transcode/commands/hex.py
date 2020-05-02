@@ -18,8 +18,7 @@ def cli(ctx, subjects, upper):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
-        click.echo(click.get_current_context().get_help())
-        exit(0)
+        click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if not ctx.has_prefix:
         ctx.prefix = '0x'
@@ -42,10 +41,10 @@ def decode(ctx):
         if isinstance(subject, bytes):
             subject = subject.decode('utf-8', 'replace')
 
-        subject = ctx.strip_fixes(subject)
-        subject = ''.join(ctx.split(subject))
+        subject = ''.join(ctx.split(ctx.strip_fixes(subject)))
+        decoded = codecs.decode(bytes(subject, 'utf-8'), 'hex').decode('utf-8', ctx.decode_mode)
 
-        print(codecs.decode(bytes(subject, 'utf-8'), 'hex').decode('utf-8', ctx.decode_mode), end='')
+        ctx.output(decoded)
 
 
 def encode(ctx, upper):
