@@ -15,7 +15,11 @@ Common options:
 
 Commands:
   b64     Converts to/from base64.
-  -r, --reverse  Reverse process (decode)
+  -c, --charset TEXT  Custom charset.  [default: ABCDEFGHIJKLMNOPQRSTUVWXYZabc
+                      defghijklmnopqrstuvwxyz0123456789+/=]
+
+  -bf, --bruteforce   Try all charset combinations
+  -r, --reverse       Reverse process (decode)
 
   bin     Converts to/from binary.
   -b, --byte-length <int>  Byte length  [default: 8]
@@ -41,8 +45,9 @@ Commands:
   url     Converts to/from URL encoding (ie. %5C).
   -a, --all        Process every character
   -A, --non-ascii  Process only non-ASCII characters. Not available in reverse
-                   mode. (default)
+                   mode.
 
+  --default        Process reserved and unprintable characters (default)"
   -r, --reverse    Reverse process (decode)
 
   xor     (un)XOR bytes.
@@ -53,7 +58,6 @@ Commands:
                      0: no compression, 1: best speed, 9: best compression
 
   -r, --reverse      Reverse process (decode)
-
 ```
 
 ## Examples
