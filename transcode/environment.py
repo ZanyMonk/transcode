@@ -59,7 +59,23 @@ class Environment(object):
         return{m: transform(m) for m in set(re.findall(pattern, subject))}
 
     def translate(self, subject: str, table: dict):
-        return ''.join([table[c] if c in table else c for c in subject])
+        if len(table) == 0:
+            return subject
+
+        key_len = len(next(iter(table.keys())))
+        output = ''
+
+        subject_len = len(subject)
+        i = 0
+        while i < subject_len:
+            sub = subject[i:i+key_len]
+            if sub in table:
+                i = i + key_len
+                output += table[sub]
+            else:
+                i = i + 1
+                output += sub[0]
+        return ''.join(output)
 
     def split(self, subject):
         return re.split(self._separator, subject)
@@ -78,14 +94,17 @@ class Environment(object):
         return subject
 
     def output(self, data):
+        if isinstance(data, str):
+            data = bytes(data, 'utf-8', self.decode_mode)
+
         if self.unsafe:
             click.get_binary_stream('stdout').write(data)
         else:
-            print(data.decode('utf-8', self.decode_mode))
+            print(data.decode('utf-8', self.decode_mode), end='')
 
-    def log(self, msg, output=sys.stdout, *args):
+    def log(self, msg, output=sys.stdout, *args, **kwargs):
         """Logs a message to stderr."""
-        click.echo(msg, file=output, *args)
+        click.echo(msg, file=output, *args, **kwargs)
 
     def vlog(self, msg, *args):
         """Logs a message to stderr only if verbosity is enabled."""
@@ -94,4 +113,4 @@ class Environment(object):
 
     def elog(self, msg, *args):
         """Logs a message to stderr only if verbosity is enabled."""
-        self.log('{}[FAILED]{} {}'.format(Fore.RED, Fore.RESET, msg), sys.stderr, *args)
+        sys.stderr.write(f'{Fore.RED}[FAILED]{Fore.RESET} {msg}\n')

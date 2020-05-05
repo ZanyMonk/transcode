@@ -17,7 +17,9 @@ def cli(ctx, subjects, key, hexa):
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 
     if hexa:
-        key = bytes.fromhex(key)
+        if len(key) > 1 and key[1] == 'x':
+            key = key[2:]
+        key = bytes.fromhex(key.zfill(2))
     else:
         key = bytes(key, 'utf-8', 'replace')
 

@@ -6,14 +6,16 @@ from transcode.common import add_common_options, add_reverse_option
 
 @click.command('url', help='Converts to/from URL encoding (ie. %5C).')
 @click.argument('subjects', nargs=-1)
-@click.option('-a', '--all', 'process_all', flag_value=True, default=True,
+@click.option('-a', '--all', 'mode', flag_value='all',
               help='Process every character')
-@click.option('-A', '--non-ascii', 'process_all', flag_value=False,
-              help='Process only non-ASCII characters. Not available in reverse mode. (default)')
+@click.option('-A', '--non-ascii', 'mode', flag_value='non-ascii',
+              help='Process only non-ASCII characters. Not available in reverse mode.')
+@click.option('--default', 'mode', flag_value='default', default=True,
+              help='Process reserved and unprintable characters (default)"')
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, process_all):
+def cli(ctx, subjects, mode):
     ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
@@ -32,7 +34,7 @@ def cli(ctx, subjects, process_all):
         if ctx.suffix == '':
             ctx.suffix = r'(?i)[^\da-f]+$'
 
-    decode(ctx) if ctx.reverse else encode(ctx, process_all)
+    decode(ctx) if ctx.reverse else encode(ctx, mode)
 
 
 def decode(ctx):
@@ -44,26 +46,28 @@ def decode(ctx):
         ctx.output(ctx.translate(string, table))
 
 
-def encode(ctx, process_all):
+def encode(ctx, mode):
     for subject in ctx.subjects:
         if isinstance(subject, bytes):
             subject = subject.decode('utf-8', 'replace')
 
-        if process_all:
-            pattern = re.compile(r'(.)', re.IGNORECASE | re.DOTALL)
-        else:
-            pattern = re.compile(r'([^\x00-\x7F])', re.IGNORECASE)
+        pattern = r'[!*\'\(\);:@&=+$,/?#\[\]\s"%\.<>\\^_`{|}~£円-]'
+        flags = re.IGNORECASE
+
+        if mode == 'all':
+            pattern = r'(.)'
+            flags |= re.DOTALL
+        elif mode == 'non-ascii':
+            pattern = r'([^\x00-\x7F])'
+
+        regex = re.compile(pattern, flags)
 
         def transform(m):
             h = hex(ord(m))[2:]
-            l = len(h)
-            h = h.zfill(l + l%2)
-            return ''.join(['%{}'.format(h[i:i+2]) for i in range(0, l, 2)])
+            h_len = len(h)
+            h = h.zfill(h_len + h_len%2)
+            return ''.join(['%{}'.format(h[i:i+2]) for i in range(0, h_len, 2)])
 
-        table = ctx.gen_trans_table(subject, pattern, transform)
+        table = ctx.gen_trans_table(subject, regex, transform)
 
-        if process_all:
-            for c in subject:
-                print(table[c], end='')
-        else:
-            print(ctx.translate(subject, table), end='')
+        ctx.output(ctx.translate(subject, table))
