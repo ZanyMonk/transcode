@@ -92,4 +92,3 @@ String.fromCharCode(137,80,78,71,...)
 - `--depth` to encode/decode multiple times (double encoding)
 ### `b64`
 - `--ignore-garbage` to strip non-compliant characters (make default)
-- `--charset` to set custom encoding charset

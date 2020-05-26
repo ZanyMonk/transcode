@@ -42,7 +42,7 @@ def decode(ctx):
             subject = subject.decode('utf-8', 'replace')
 
         subject = ''.join(ctx.split(ctx.strip_fixes(subject)))
-        decoded = codecs.decode(bytes(subject, 'utf-8'), 'hex').decode('utf-8', ctx.decode_mode)
+        decoded = codecs.decode(bytes(subject, 'utf-8'), 'hex')
 
         ctx.output(decoded)
 
