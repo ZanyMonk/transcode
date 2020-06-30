@@ -5,7 +5,7 @@ import click
 from colorama import Fore, Style
 
 from transcode.environment import Environment
-from transcode.common import add_common_options
+from transcode.common import add_common_options, add_subject_argument
 
 CONTEXT_SETTINGS = dict(
     auto_envvar_prefix='TRANSCODE',
@@ -49,6 +49,7 @@ class TranscodeCLI(click.MultiCommand):
                 for name in self.list_commands(ctx):
                     cmd = self.get_command(ctx, name)
                     opts = []
+
                     for p in cmd.get_params(ctx):
                         rv = p.get_help_record(ctx)
                         if ''.join(p.opts) not in shown and rv is not None:
@@ -83,7 +84,7 @@ class TranscodeCLI(click.MultiCommand):
                              None, None, ['cli'])
         except ImportError:
             return
-        return mod.cli
+        return add_subject_argument(mod.cli)
 
 
 @click.command(cls=TranscodeCLI, context_settings=CONTEXT_SETTINGS, options_metavar='',

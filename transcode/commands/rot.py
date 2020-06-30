@@ -1,6 +1,5 @@
 import re
 import click
-from sys import exit
 from string import ascii_lowercase
 from transcode.cli import pass_environment
 from transcode.common import add_common_options, RangeParamType
@@ -9,7 +8,6 @@ RANGE = RangeParamType()
 
 
 @click.command('rot', help='Rotates characters.')
-@click.argument('subjects', nargs=-1)
 @click.option('-n', '--offset', type=RANGE, default=13, show_default=True, metavar='<int>',
               help='Rotation offset.')
 @click.option('-a', '--alpha', 'charset', flag_value='alpha', default=True,
@@ -20,9 +18,7 @@ RANGE = RangeParamType()
               help='Use a custom charset. Overwrites -a and -A')
 @add_common_options
 @pass_environment
-def cli(ctx, subjects, offset, charset, custom_charset):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, offset, charset, custom_charset):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

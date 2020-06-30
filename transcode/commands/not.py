@@ -5,12 +5,9 @@ from transcode.common import add_common_options
 
 
 @click.command('not', help='Inverse every bit.')
-@click.argument('subjects', nargs=-1)
 @add_common_options
 @pass_environment
-def cli(ctx, subjects):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

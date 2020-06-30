@@ -5,7 +5,6 @@ from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('url', help='Converts to/from URL encoding (ie. %5C).')
-@click.argument('subjects', nargs=-1)
 @click.option('-a', '--all', 'mode', flag_value='all',
               help='Process every character')
 @click.option('-A', '--non-ascii', 'mode', flag_value='non-ascii',
@@ -15,9 +14,7 @@ from transcode.common import add_common_options, add_reverse_option
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, mode):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, mode):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

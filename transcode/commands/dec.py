@@ -4,14 +4,11 @@ from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('dec', help='Converts to/from decimal.')
-@click.argument('subjects', nargs=-1)
 @click.option('-js', '--fromCharCode', 'js', is_flag=True, help='ie. String.fromCharCode(97,98,99) > abc')
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, js):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, js):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

@@ -1,19 +1,15 @@
 import click
-from sys import exit
 from transcode.cli import pass_environment
 from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('bin', help='Converts to/from binary.')
-@click.argument('subjects', nargs=-1)
 @click.option('-b', '--byte-length', default=8, type=int, metavar='<int>', show_default=True,
               help='Byte length')
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, byte_length):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, byte_length):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

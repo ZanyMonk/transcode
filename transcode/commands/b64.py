@@ -10,16 +10,13 @@ CHARSET_LEN = len(STANDARD_CHARSET)
 
 
 @click.command('b64', help='Converts to/from base64.')
-@click.argument('subjects', nargs=-1)
 @click.option('-c', '--charset', help='Custom charset.',
               default=STANDARD_CHARSET, show_default=True)
 @click.option('-bf', '--bruteforce', is_flag=True, default=False, help='Try all charset combinations')
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, charset, bruteforce):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, charset, bruteforce):
     if len(ctx.subjects) == 0:
         click.echo(click.get_current_context().get_help())
 
@@ -71,7 +68,6 @@ def decode(ctx, charset, bruteforce):
                 ctx.elog('failed decoding b64.')
 
 
-
 def encode(ctx, charset):
     first = True
     trans = False
@@ -83,7 +79,7 @@ def encode(ctx, charset):
         if isinstance(subject, str):
             subject = bytes(subject, 'utf-8', 'replace')
 
-        b64 = codecs.encode(subject, 'base64').decode('utf-8')[:-1]
+        b64 = codecs.encode(subject, 'base64').decode('utf-8').replace('\n', '')
 
         if trans:
             b64 = ctx.translate(b64, trans_table)

@@ -1,4 +1,6 @@
 import click
+from os import path
+
 from transcode.environment import Environment
 
 
@@ -18,6 +20,26 @@ class RangeParamType(click.ParamType):
             else:
                 self.fail('{}.\nPlease, use offset (3), range (3-13) or list format (3,4,5)'.format(value))
 
+
+def add_subject_argument(f):
+    def callback(ctx, param, value):
+        state = ctx.ensure_object(Environment)
+        if isinstance(value, tuple) and value:
+            # print('subjects', value)
+            for v in value:
+                if len(v) < 4096 and path.exists(v):
+                    print('adding subject', v)
+                    state.subjects.append(open(v, 'rb'))
+                else:
+                    state.subjects.append(v)
+            return value
+
+    return click.argument(
+        'subjects', nargs=-1,
+        expose_value=False,
+        # help='A string or path',
+        callback=callback
+    )(f)
 
 def add_verbosity_option(f):
     def callback(ctx, param, value):
@@ -116,6 +138,7 @@ def add_separator_option(f):
 
 
 def add_common_options(f):
+    # f = add_subject_argument(f)
     f = add_verbosity_option(f)
     f = add_unsafe_option(f)
     f = add_prefix_option(f)

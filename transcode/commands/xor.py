@@ -1,18 +1,14 @@
 import click
-from sys import exit
 from transcode.cli import pass_environment
 from transcode.common import add_common_options
 
 
 @click.command('xor', help='(un)XOR bytes.')
-@click.argument('subjects', nargs=-1)
 @click.argument('key', nargs=1)
 @click.option('-x', '--hexa', is_flag=True, help="Get key as hexadecimal")
 @add_common_options
 @pass_environment
-def cli(ctx, subjects, key, hexa):
-    ctx.subjects = ctx.subjects + list(subjects)
-
+def cli(ctx, key, hexa):
     if len(ctx.subjects) == 0:
         click.get_current_context().fail("Error: Missing argument 'SUBJECT'.")
 

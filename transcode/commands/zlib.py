@@ -6,7 +6,6 @@ from transcode.common import add_common_options, add_reverse_option
 
 
 @click.command('zlib', help='Compress/decompress zlib encoded data.')
-@click.argument('subjects', nargs=-1)
 @click.option('-l', '--level', type=int, default=6, metavar='<int>',
               help="""\b
               Compression level. [default: 6]
@@ -14,7 +13,7 @@ from transcode.common import add_common_options, add_reverse_option
 @add_common_options
 @add_reverse_option
 @pass_environment
-def cli(ctx, subjects, level):
+def cli(ctx, level):
     if level < 0 or level > 9:
         click.get_current_context().fail(
             f'Invalid compression level "{level}".' +
@@ -27,8 +26,6 @@ def cli(ctx, subjects, level):
     9: best compression
             """
         )
-
-    ctx.subjects = ctx.subjects + list(subjects)
 
     if len(ctx.subjects) == 0:
         ctx.elog('No input given.')
